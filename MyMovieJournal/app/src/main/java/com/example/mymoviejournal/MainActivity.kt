@@ -6,10 +6,8 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.mymoviejournal.ui.theme.MyMovieJournalTheme
@@ -37,14 +35,22 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyMovieJournalTheme {
+                // State to track authentication status
+                var isLoggedIn by remember { mutableStateOf(firebaseAuth.currentUser != null) }
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val currentUser = remember { firebaseAuth.currentUser }
-                    if (currentUser != null) {
-                        HomeScreen(Modifier.padding(innerPadding))
+                    if (isLoggedIn) {
+                        HomeScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            onLogout = {
+                                firebaseAuth.signOut()
+                                isLoggedIn = false
+                            }
+                        )
                     } else {
                         AuthScreen(
                             onAuthSuccess = {
-                                recreate() // Reload activity to refresh user session
+                                isLoggedIn = true
                             }
                         )
                     }
@@ -55,19 +61,26 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier, onLogout: () -> Unit) {
     Scaffold(
         topBar = {
-            androidx.compose.material.TopAppBar(title = { Text("Home") })
+            TopAppBar(title = { Text("Home") })
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
             Text("Welcome to My Movie Journal!")
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = onLogout) {
+                Text("Log Out")
+            }
         }
     }
 }
+
