@@ -6,3 +6,7 @@ plugins {
     // Firebase Google Services plugin
     id("com.google.gms.google-services") version "4.4.2" apply false
 }
+// Clean task for cleaning the build directory
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
+}
