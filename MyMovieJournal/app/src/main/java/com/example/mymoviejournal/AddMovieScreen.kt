@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.mymoviejournal.api.Movie
 import com.example.mymoviejournal.api.TMDbService
@@ -21,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AddMovieScreen(
-    onNavigateToReviewScreen: (String) -> Unit,
+    navController: NavHostController,
     tmdbService: TMDbService = TMDbService.create()
 ) {
     val scope = rememberCoroutineScope()
@@ -76,7 +78,7 @@ fun AddMovieScreen(
                 items(movies) { movie ->
                     MovieCard(movie = movie, onAddMovie = { movie, rating ->
                         addMovieToJournal(db, movie, rating)
-                        onNavigateToReviewScreen(movie.title)
+                        navController.navigate("reviewScreen/${movie.title}")
                     })
                 }
 
@@ -113,7 +115,7 @@ fun AddMovieScreen(
 fun addMovieToJournal(db: FirebaseFirestore, movie: Movie, rating: Float) {
     val movieData = hashMapOf(
         "title" to movie.title,
-        "poster_path" to movie.poster_path,
+        "poster_path" to "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
         "rating" to rating,
         "timestamp" to System.currentTimeMillis()
     )
@@ -178,8 +180,8 @@ fun MovieCard(movie: Movie, onAddMovie: (Movie, Float) -> Unit) {
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            Image(
-                painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/w500/${movie.poster_path}"),
+            AsyncImage(
+                model = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
                 contentDescription = "${movie.title} Poster",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

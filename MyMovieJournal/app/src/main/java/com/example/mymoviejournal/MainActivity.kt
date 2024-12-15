@@ -1,15 +1,28 @@
 package com.example.mymoviejournal
+
 import android.os.Bundle
 import android.view.View
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.navigation.NavType
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import com.example.mymoviejournal.components.TopNavigationMenu
 import com.example.mymoviejournal.ui.theme.MyMovieJournalTheme
 import com.google.firebase.auth.FirebaseAuth
 
@@ -33,42 +46,34 @@ class MainActivity : ComponentActivity() {
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance()
 
-
+        // Set content
         setContent {
             MyMovieJournalTheme {
-                val navController = rememberNavController()
+                MyMovieJournalApp()
+            }
+        }
+    }
+}
 
-                NavHost(
-                    navController = navController,
-                    startDestination = "home"
-                ) {
-                    //aDD hOME sCREEN
-                    composable("home") {
-                        HomeScreen(
-                            onNavigateToAddMovie = {
-                                navController.navigate("addMovie")
-                            }
-                        )
-                    }
-                    // Add Movie Screen
-                    composable("addMovie") {
-                        AddMovieScreen(
-                            onNavigateToReviewScreen = { movieTitle ->
-                                navController.navigate("reviewScreen/$movieTitle")
-                            }
-                        )
-                    }
-                    // Add Review Screen
-                    composable("reviewScreen/{movieTitle}") { backStackEntry ->
-                        val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
+@Composable
+fun MyMovieJournalApp() {
+    val navController = rememberNavController()
 
-                        ReviewScreen(
-                            movieTitle = movieTitle,
-                            onNavigateBack = { navController.popBackStack() }
-                        )
-                    }
-
-                }
+    Scaffold(
+        topBar = { TopNavigationMenu(navController) }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "home",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("home") { HomeScreen(navController) }
+            composable("journal") { JournalScreen(navController) }
+            composable("reviews") { ReviewListScreen(navController) }
+            composable("addMovie") { AddMovieScreen(navController) }
+            composable("reviewScreen/{movieTitle}") { backStackEntry ->
+                val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
+                ReviewScreen(movieTitle)
             }
         }
     }
