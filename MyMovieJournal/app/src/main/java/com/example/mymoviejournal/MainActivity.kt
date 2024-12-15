@@ -1,17 +1,15 @@
 package com.example.mymoviejournal
-
 import android.os.Bundle
 import android.view.View
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.mymoviejournal.ui.theme.MyMovieJournalTheme
 import com.google.firebase.auth.FirebaseAuth
 
@@ -35,39 +33,43 @@ class MainActivity : ComponentActivity() {
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance()
 
+
         setContent {
             MyMovieJournalTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val currentUser = remember { firebaseAuth.currentUser }
-                    if (currentUser != null) {
-                        HomeScreen(Modifier.padding(innerPadding))
-                    } else {
-                        AuthScreen(
-                            onAuthSuccess = {
-                                recreate() // Reload activity to refresh user session
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "home"
+                ) {
+                    //aDD hOME sCREEN
+                    composable("home") {
+                        HomeScreen(
+                            onNavigateToAddMovie = {
+                                navController.navigate("addMovie")
                             }
                         )
                     }
+                    // Add Movie Screen
+                    composable("addMovie") {
+                        AddMovieScreen(
+                            onNavigateToReviewScreen = { movieTitle ->
+                                navController.navigate("reviewScreen/$movieTitle")
+                            }
+                        )
+                    }
+                    // Add Review Screen
+                    composable("reviewScreen/{movieTitle}") { backStackEntry ->
+                        val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
+
+                        ReviewScreen(
+                            movieTitle = movieTitle,
+                            onNavigateBack = { navController.popBackStack() }
+                        )
+                    }
+
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    Scaffold(
-        topBar = {
-            androidx.compose.material.TopAppBar(title = { Text("Home") })
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-        ) {
-            Text("Welcome to My Movie Journal!")
         }
     }
 }
