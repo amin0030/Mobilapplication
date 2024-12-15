@@ -68,9 +68,32 @@ dependencies {
     // Firebase Authentication SDK
     implementation("com.google.firebase:firebase-auth-ktx")
 
-    // Firebase Analytics SDK (valgfrit)
+    // Firebase Analytics SDK (optional)
     implementation("com.google.firebase:firebase-analytics-ktx")
 
+    // Google Maps SDK for Android
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+
+    // Google Maps KTX (Use a known working version and correct artifact name)
+    implementation("com.google.maps.android:maps-ktx:3.3.0")
+
+    // Google Places SDK for Android
+    implementation("com.google.android.libraries.places:places:2.6.0")
+
+    // Accompanist Permissions (for runtime permissions in Compose)
+    implementation("com.google.accompanist:accompanist-permissions:0.30.1")
+
+    // Compose Lifecycle ViewModel Integration
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
+    // Maps Compose Utilities
+    implementation("com.google.maps.android:maps-compose:2.13.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
+    // Test dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -79,4 +102,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.1")
 }
 
+// Apply the Google Services plugin
 apply(plugin = "com.google.gms.google-services")
