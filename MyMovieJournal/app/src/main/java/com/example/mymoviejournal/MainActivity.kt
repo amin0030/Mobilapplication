@@ -6,31 +6,18 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-<<<<<<< HEAD
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-=======
 import androidx.compose.material.*
 import androidx.compose.runtime.*
->>>>>>> 91e182fc996d05930e07ebbc4c9b3fa6a8ea51e9
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mymoviejournal.components.TopNavigationMenu
 import com.example.mymoviejournal.ui.theme.MyMovieJournalTheme
-import com.google.firebase.auth.FirebaseAuth
 import com.google.android.libraries.places.api.Places
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
@@ -58,75 +45,72 @@ class MainActivity : ComponentActivity() {
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance()
 
-        // Set content
         setContent {
             MyMovieJournalTheme {
-<<<<<<< HEAD
                 MyMovieJournalApp()
-=======
-                var isLoggedIn by remember { mutableStateOf(firebaseAuth.currentUser != null) }
-
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    if (isLoggedIn) {
-                        HomeScreen(
-                            modifier = Modifier.padding(innerPadding),
-                            onLogout = {
-                                firebaseAuth.signOut()
-                                isLoggedIn = false
-                            },
-                            onNavigateToMap = {
-                                startActivity(MapActivity.createIntent(this))
-                            }
-                        )
-                    } else {
-                        AuthScreen(
-                            onAuthSuccess = {
-                                isLoggedIn = true
-                            }
-                        )
-                    }
-                }
->>>>>>> 91e182fc996d05930e07ebbc4c9b3fa6a8ea51e9
             }
         }
     }
 }
 
 @Composable
-<<<<<<< HEAD
 fun MyMovieJournalApp() {
     val navController = rememberNavController()
+    var isLoggedIn by remember { mutableStateOf(FirebaseAuth.getInstance().currentUser != null) }
 
     Scaffold(
         topBar = { TopNavigationMenu(navController) }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "home",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("home") { HomeScreen(navController) }
-            composable("journal") { JournalScreen(navController) }
-            composable("reviews") { ReviewListScreen(navController) }
-            composable("addMovie") { AddMovieScreen(navController) }
-            composable("reviewScreen/{movieTitle}") { backStackEntry ->
-                val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
-                ReviewScreen(movieTitle)
-=======
+        if (isLoggedIn) {
+            NavHost(
+                navController = navController,
+                startDestination = "home",
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable("home") {
+                    HomeScreen(
+                        onLogout = {
+                            FirebaseAuth.getInstance().signOut()
+                            isLoggedIn = false
+                        },
+                        onNavigateToMap = {
+                            // Start map activity
+                            navController.context.startActivity(
+                                MapActivity.createIntent(navController.context)
+                            )
+                        }
+                    )
+                }
+                composable("journal") { JournalScreen(navController) }
+                composable("reviews") { ReviewListScreen(navController) }
+                composable("addMovie") { AddMovieScreen(navController) }
+                composable("reviewList") { ReviewListScreen(navController) }
+                composable("reviewScreen/{movieTitle}") { backStackEntry ->
+                    val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
+                    ReviewScreen(movieTitle)
+                }
+            }
+        } else {
+            AuthScreen(
+                onAuthSuccess = { isLoggedIn = true }
+            )
+        }
+    }
+}
+
+@Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
     onLogout: () -> Unit,
     onNavigateToMap: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Home") })
-        }
-    ) { paddingValues ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
@@ -139,7 +123,6 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = onLogout) {
                 Text("Log Out")
->>>>>>> 91e182fc996d05930e07ebbc4c9b3fa6a8ea51e9
             }
         }
     }

@@ -18,7 +18,6 @@ android {
         versionName = "1.0"
         buildConfigField("String", "TMDB_API_KEY", "\"${project.findProperty("TMDB_API_KEY") ?: ""}\"")
 
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -43,7 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
-        buildFeatures.buildConfig = true
+        buildConfig = true // Beholder fra kode 2
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -53,7 +52,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1,*.kotlin_module}"
         }
     }
-}
+
+    configurations.all {
+        resolutionStrategy {
+            // Force consistent version of androidx.appcompat
+            force("androidx.appcompat:appcompat:1.4.1")
+            force("androidx.appcompat:appcompat-resources:1.4.1")
+        }
+    }
 
 dependencies {
     // AndroidX and Jetpack Compose
@@ -69,53 +75,36 @@ dependencies {
     // Firebase BoM (Bill of Materials)
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
 
-    // Firebase Authentication SDK
+    // Firebase SDKs
     implementation("com.google.firebase:firebase-auth-ktx")
-
-    // Firebase Analytics SDK (optional)
     implementation("com.google.firebase:firebase-analytics-ktx")
-
-<<<<<<< HEAD
-    // Firebase Firestore SDK
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
+    implementation("com.google.firebase:firebase-firestore-ktx") // Tilføjet fra kode 2
 
     // Retrofit for HTTP Requests
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.google.accompanist:accompanist-swiperefresh:0.30.1")
 
     // Coil for Image Loading
     implementation("io.coil-kt:coil-compose:2.0.0")
 
-
-
-=======
-    // Google Maps SDK for Android
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-
-    // Google Maps KTX (Use a known working version and correct artifact name)
-    implementation("com.google.maps.android:maps-ktx:3.3.0")
-
-    // Google Places SDK for Android
-    implementation("com.google.android.libraries.places:places:2.6.0")
-
-    // Accompanist Permissions (for runtime permissions in Compose)
+    // Accompanist Libraries
     implementation("com.google.accompanist:accompanist-permissions:0.30.1")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.30.1")
+
+    // Google Maps and Places SDK
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.maps.android:maps-ktx:3.3.0")
+    implementation("com.google.android.libraries.places:places:2.6.0")
+    implementation("com.google.maps.android:maps-compose:2.13.0")
 
     // Compose Lifecycle ViewModel Integration
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-
-    // Maps Compose Utilities
-    implementation("com.google.maps.android:maps-compose:2.13.0")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 
     // Test dependencies
->>>>>>> 91e182fc996d05930e07ebbc4c9b3fa6a8ea51e9
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -124,5 +113,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.1")
 }
 
-// Apply the Google Services plugin
-apply(plugin = "com.google.gms.google-services")
+    // Apply the Google Services plugin
+    apply(plugin = "com.google.gms.google-services")
+}
+
