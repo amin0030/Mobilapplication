@@ -2,21 +2,24 @@ package com.example.mymoviejournal
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun ReviewScreen(movieTitle: String) {
+fun ReviewScreen(movieTitle: String, navController: NavController) {
+    val db = FirebaseFirestore.getInstance()
     var comment by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
     // Hent eksisterende kommentar fra Firestore
     LaunchedEffect(movieTitle) {
-        val db = FirebaseFirestore.getInstance()
         db.collection("UserJournal")
             .whereEqualTo("title", movieTitle)
             .get()
@@ -24,8 +27,6 @@ fun ReviewScreen(movieTitle: String) {
                 if (!querySnapshot.isEmpty) {
                     val document = querySnapshot.documents[0]
                     comment = document.getString("comment") ?: ""
-                } else {
-                    errorMessage = "Movie not found in UserJournal"
                 }
                 isLoading = false
             }
@@ -37,7 +38,14 @@ fun ReviewScreen(movieTitle: String) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Review for $movieTitle") })
+            TopAppBar(
+                title = { Text("Review for $movieTitle") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
         }
     ) { paddingValues ->
         Box(
@@ -67,7 +75,23 @@ fun ReviewScreen(movieTitle: String) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { /* Update logic her */ },
+                        onClick = {
+                            // Gem anmeldelsen i Firestore
+                            db.collection("UserJournal")
+                                .whereEqualTo("title", movieTitle)
+                                .get()
+                                .addOnSuccessListener { querySnapshot ->
+                                    if (!querySnapshot.isEmpty) {
+                                        val documentId = querySnapshot.documents[0].id
+                                        db.collection("UserJournal")
+                                            .document(documentId)
+                                            .update("comment", comment)
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    errorMessage = "Failed to save: ${e.message}"
+                                }
+                        },
                         modifier = Modifier.align(Alignment.End)
                     ) {
                         Text("Save Review")

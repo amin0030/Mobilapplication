@@ -73,7 +73,11 @@ fun MyMovieJournalApp() {
             }
             composable("reviewScreen/{movieTitle}") { backStackEntry ->
                 val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
-                ReviewScreen(movieTitle)
+                ReviewScreen(movieTitle, navController)
+            }
+
+            composable("dailyRecommendation") {
+                DailyRecommendationScreen()
             }
         }
     } else {

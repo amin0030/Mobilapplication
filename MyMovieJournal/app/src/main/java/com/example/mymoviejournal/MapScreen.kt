@@ -78,7 +78,7 @@ fun MapScreen(mapViewModel: MapViewModel) {
         topBar = {
             TopAppBar(
                 title = { Text("Nearby Cinemas") },
-                backgroundColor = MaterialTheme.colors.primarySurface
+                backgroundColor = MaterialTheme.colors.primarySurface,
             )
         }
     ) { paddingValues ->

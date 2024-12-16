@@ -1,5 +1,6 @@
 package com.example.mymoviejournal.api
 
+import android.media.Rating
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -10,6 +11,13 @@ interface TMDbService {
 
     @GET("movie/popular")
     suspend fun getPopularMovies(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): MovieResponse
+
+    @GET("movie/top_rated")
+    suspend fun getTopRatedMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
@@ -36,7 +44,10 @@ data class MovieResponse(
 data class Movie(
     val id: Int,
     val title: String,
-    val poster_path: String
+    val overview: String,
+    val poster_path: String,
+    val vote_average: Double
+
 )
 
 

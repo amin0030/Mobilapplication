@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,12 +15,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun ReviewListScreen(navController: NavController) {
+    val db = FirebaseFirestore.getInstance()
     var reviews by remember { mutableStateOf<List<Map<String, Any>>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        val db = FirebaseFirestore.getInstance()
         db.collection("UserJournal")
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -34,7 +36,12 @@ fun ReviewListScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("My Reviews") }
+                title = { Text("My Reviews") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -70,7 +77,7 @@ fun ReviewListScreen(navController: NavController) {
 
 @Composable
 fun ReviewCardWithButton(review: Map<String, Any>, navController: NavController) {
-    val title = review["title"] as? String ?: "Unknown Title" // Null-sikker titel
+    val title = review["title"] as? String ?: "Unknown Title"
     val comment = review["comment"] as? String ?: "No review available"
 
     Card(
