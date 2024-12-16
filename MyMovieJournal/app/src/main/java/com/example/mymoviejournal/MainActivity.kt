@@ -14,7 +14,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.mymoviejournal.components.TopNavigationMenu
 import com.example.mymoviejournal.ui.theme.MyMovieJournalTheme
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.auth.FirebaseAuth
@@ -58,72 +57,28 @@ fun MyMovieJournalApp() {
     val navController = rememberNavController()
     var isLoggedIn by remember { mutableStateOf(FirebaseAuth.getInstance().currentUser != null) }
 
-    Scaffold(
-        topBar = { TopNavigationMenu(navController) }
-    ) { innerPadding ->
-        if (isLoggedIn) {
-            NavHost(
-                navController = navController,
-                startDestination = "home",
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable("home") {
-                    HomeScreen(
-                        onLogout = {
-                            FirebaseAuth.getInstance().signOut()
-                            isLoggedIn = false
-                        },
-                        onNavigateToMap = {
-                            // Start map activity
-                            navController.context.startActivity(
-                                MapActivity.createIntent(navController.context)
-                            )
-                        }
-                    )
-                }
-                composable("journal") { JournalScreen(navController) }
-                composable("reviews") { ReviewListScreen(navController) }
-                composable("addMovie") { AddMovieScreen(navController) }
-                composable("reviewList") { ReviewListScreen(navController) }
-                composable("reviewScreen/{movieTitle}") { backStackEntry ->
-                    val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
-                    ReviewScreen(movieTitle)
-                }
-            }
-        } else {
-            AuthScreen(
-                onAuthSuccess = { isLoggedIn = true }
-            )
-        }
-    }
-}
-
-@Composable
-fun HomeScreen(
-    onLogout: () -> Unit,
-    onNavigateToMap: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+    if (isLoggedIn) {
+        NavHost(
+            navController = navController,
+            startDestination = "home"
         ) {
-            Text("Welcome to My Movie Journal!")
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = onNavigateToMap) {
-                Text("Find Nearby Cinemas")
+            composable("home") { HomeScreen(navController) }
+            composable("journal") { JournalScreen(navController) }
+            composable("reviews") { ReviewListScreen(navController) }
+            composable("addMovie") { AddMovieScreen(navController) }
+            composable("map") {
+                navController.context.startActivity(
+                    MapActivity.createIntent(navController.context)
+                )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = onLogout) {
-                Text("Log Out")
+            composable("reviewScreen/{movieTitle}") { backStackEntry ->
+                val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
+                ReviewScreen(movieTitle)
             }
         }
+    } else {
+        AuthScreen(
+            onAuthSuccess = { isLoggedIn = true }
+        )
     }
 }

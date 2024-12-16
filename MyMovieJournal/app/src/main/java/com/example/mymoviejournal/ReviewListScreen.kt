@@ -44,31 +44,23 @@ fun ReviewListScreen(navController: NavController) {
                 .padding(paddingValues)
         ) {
             when {
-                isLoading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-                errorMessage != null -> {
-                    Text(
-                        text = errorMessage ?: "Unknown error",
-                        color = MaterialTheme.colors.error,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-                reviews.isEmpty() -> {
-                    Text(
-                        text = "No reviews available.",
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-                else -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp)
-                    ) {
-                        items(reviews) { review ->
-                            ReviewCardWithButton(review, navController)
-                        }
+                isLoading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                errorMessage != null -> Text(
+                    text = errorMessage ?: "Unknown error",
+                    color = MaterialTheme.colors.error,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                reviews.isEmpty() -> Text(
+                    text = "No reviews available.",
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                else -> LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(reviews) { review ->
+                        ReviewCardWithButton(review, navController)
                     }
                 }
             }
@@ -78,6 +70,9 @@ fun ReviewListScreen(navController: NavController) {
 
 @Composable
 fun ReviewCardWithButton(review: Map<String, Any>, navController: NavController) {
+    val title = review["title"] as? String ?: "Unknown Title" // Null-sikker titel
+    val comment = review["comment"] as? String ?: "No review available"
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -89,35 +84,16 @@ fun ReviewCardWithButton(review: Map<String, Any>, navController: NavController)
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
+            Text(text = title, style = MaterialTheme.typography.h6)
             Text(
-                text = review["title"] as? String ?: "Unknown Title",
-                style = MaterialTheme.typography.h6,
+                text = "Review: $comment",
+                style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            val comment = review["comment"] as? String
-            if (!comment.isNullOrBlank()) {
-                Text(
-                    text = "Review: $comment",
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-            } else {
-                Text(
-                    text = "No review available.",
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
-                )
-            }
-
             Button(
-                onClick = {
-                    val title = review["title"] as? String ?: ""
-                    navController.navigate("reviewScreen/$title")
-                },
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(top = 8.dp)
+                onClick = { navController.navigate("reviewScreen/${title}") },
+                modifier = Modifier.align(Alignment.End)
             ) {
                 Text("Add/Update Review")
             }
