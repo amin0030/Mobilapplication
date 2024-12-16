@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    val tabs = listOf("Home", "Journal", "Add Movie", "Map", "Reviews", "Daily Recommendation")
+    val tabs = listOf("Home", "Journal", "Add Movie", "Map", "Reviews", "Daily Recommendation", "Movie Overview")
     var selectedTabIndex by remember { mutableStateOf(0) }
 
     Scaffold(
@@ -47,6 +47,7 @@ fun HomeScreen(navController: NavController) {
                                     }
                                     "Reviews" -> navController.navigate("reviews")
                                     "Daily Recommendation" -> navController.navigate("dailyRecommendation")
+                                    "Movie Overview" -> navController.navigate("movieOverview")
                                 }
                             },
                             text = { Text(title, color = Color.White) }

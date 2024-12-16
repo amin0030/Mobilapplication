@@ -86,6 +86,8 @@ fun MovieGridItem(movie: RatedMovie, navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(movie.title, style = MaterialTheme.typography.subtitle1)
             Text("Rating: ${movie.rating}", color = Color.Gray)
+            Text("Release Date: ${movie.releaseDate}", color = Color.Gray)
+            Text("Runtime: ${movie.runtime}", color = Color.Gray)
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = { navController.navigate("reviewScreen/${movie.title}") }) {
                 Text("Edit Review")
