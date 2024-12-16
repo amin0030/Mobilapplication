@@ -77,7 +77,7 @@ fun MyMovieJournalApp() {
             }
 
             composable("dailyRecommendation") {
-                DailyRecommendationScreen()
+                DailyRecommendationScreen(navController)
             }
         }
     } else {

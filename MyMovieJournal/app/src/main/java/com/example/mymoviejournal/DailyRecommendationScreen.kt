@@ -3,17 +3,20 @@ package com.example.mymoviejournal
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.mymoviejournal.viewmodel.RecommendationViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun DailyRecommendationScreen() {
+fun DailyRecommendationScreen(navController: NavController) {
     val context = LocalContext.current
     val viewModel = remember { RecommendationViewModel(context) } // Pass context to ViewModel
     val movie by viewModel.movie.collectAsState()
@@ -23,7 +26,12 @@ fun DailyRecommendationScreen() {
         topBar = {
             TopAppBar(
                 title = { Text("Daily Movie Recommendation") },
-                backgroundColor = MaterialTheme.colors.primarySurface
+                backgroundColor = MaterialTheme.colors.primarySurface,
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
             )
         }
     ) { paddingValues ->
