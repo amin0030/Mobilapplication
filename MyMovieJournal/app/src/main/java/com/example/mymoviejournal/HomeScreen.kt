@@ -1,10 +1,20 @@
 package com.example.mymoviejournal
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
@@ -16,9 +26,11 @@ fun HomeScreen(navController: NavController) {
         topBar = {
             Column {
                 TopAppBar(
-                    title = { Text("My Movie Journal") }
+                    title = { Text("My Movie Journal") },
+                    backgroundColor = Color(0xFF6A1B9A),
+                    contentColor = Color.White
                 )
-                TabRow(selectedTabIndex = selectedTabIndex) {
+                TabRow(selectedTabIndex = selectedTabIndex, backgroundColor = Color(0xFF9C27B0)) {
                     tabs.forEachIndexed { index, title ->
                         Tab(
                             selected = selectedTabIndex == index,
@@ -37,7 +49,7 @@ fun HomeScreen(navController: NavController) {
                                     "Daily Recommendation" -> navController.navigate("dailyRecommendation")
                                 }
                             },
-                            text = { Text(title) }
+                            text = { Text(title, color = Color.White) }
                         )
                     }
                 }
@@ -49,13 +61,47 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            // Baggrundsbillede
+            Image(
+                painter = painterResource(id = R.drawable.movie_banner), // Sørg for billedet er i res/drawable
+                contentDescription = "Background Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            // Indhold ovenpå billedet
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Welcome to My Movie Journal!")
+                Text(
+                    text = "Welcome to My Movie Journal",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFFFD700),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Explore the world of movies!",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFFFD700),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Use the Movie Journal App to read reviews, add movies to your journal, and discover your daily film recommendation.",
+                    fontSize = 18.sp,
+                    color = Color(0xFFFFD700),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
             }
         }
     }
