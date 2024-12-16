@@ -26,12 +26,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize the Places SDK if not initialized
+
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, getString(R.string.google_maps_key))
         }
 
-        // Enable edge-to-edge layout
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
         } else {
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     )
         }
 
-        // Initialize Firebase Auth
+
         firebaseAuth = FirebaseAuth.getInstance()
 
         setContent {

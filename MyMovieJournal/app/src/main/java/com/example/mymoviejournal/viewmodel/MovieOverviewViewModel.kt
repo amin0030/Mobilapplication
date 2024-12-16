@@ -24,7 +24,7 @@ class MovieOverviewViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
     private val tmdbService = TMDbService.create()
-    private val apiKey = "939b476a789f7fcabff071dc47ebd640" // Replace with your TMDB API key
+    private val apiKey = "939b476a789f7fcabff071dc47ebd640"
 
     fun fetchRatedMovies() {
         viewModelScope.launch {
@@ -62,7 +62,7 @@ class MovieOverviewViewModel : ViewModel() {
 
     private suspend fun fetchMovieDetailsByTitle(movieTitle: String): MovieDetailsResponse? {
         return try {
-            // Search for the movie by its title
+
             val searchResponse = tmdbService.searchMovies(apiKey, movieTitle)
             val movie = searchResponse.results.firstOrNull()
             movie?.let { tmdbService.getMovieDetails(it.id, apiKey) }

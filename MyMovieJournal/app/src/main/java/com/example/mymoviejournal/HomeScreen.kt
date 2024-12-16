@@ -25,6 +25,7 @@ fun HomeScreen(navController: NavController) {
     Scaffold(
         topBar = {
             Column {
+                Spacer(modifier = Modifier.height(20.dp))
                 TopAppBar(
                     title = { Text("My Movie Journal") },
                     backgroundColor = Color(0xFF6A1B9A),
@@ -62,15 +63,15 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Baggrundsbillede
+            // Background Image
             Image(
-                painter = painterResource(id = R.drawable.movie_banner), // Sørg for billedet er i res/drawable
+                painter = painterResource(id = R.drawable.movie_banner),
                 contentDescription = "Background Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Indhold ovenpå billedet
+            // Content on Top
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -102,7 +103,6 @@ fun HomeScreen(navController: NavController) {
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
-
             }
         }
     }

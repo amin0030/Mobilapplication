@@ -18,7 +18,7 @@ class RecommendationViewModel(context: Context) : ViewModel() {
 
     private val tmdbService = TMDbService.create()
 
-    // Fetch API Key directly from strings.xml
+
     private val apiKey: String = context.getString(R.string.tmdb_api_key)
 
     init {

@@ -19,7 +19,7 @@ class MapActivity : ComponentActivity() {
 
         setContent {
             MyMovieJournalTheme {
-                val navController = rememberNavController() // Create navController
+                val navController = rememberNavController()
                 MapScreen(navController = navController, mapViewModel = mapViewModel)
             }
         }

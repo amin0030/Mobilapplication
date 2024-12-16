@@ -32,7 +32,7 @@ fun AddMovieScreen(
     var isEndOfList by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
 
-    // Function to load movies
+
     fun loadMovies(page: Int) {
         scope.launch {
             isLoading = true
@@ -54,15 +54,15 @@ fun AddMovieScreen(
         }
     }
 
-    // Initial load
+
     LaunchedEffect(Unit) {
         loadMovies(currentPage)
     }
 
     Scaffold(
         topBar = {
-            Column { // Wrap TopAppBar in a Column for padding
-                Spacer(modifier = Modifier.height(16.dp)) // Add space above TopAppBar
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
                 TopAppBar(
                     title = { Text("Add a Movie") },
                     navigationIcon = {
@@ -88,7 +88,7 @@ fun AddMovieScreen(
                     })
                 }
 
-                // Show a loading indicator at the bottom when fetching more movies
+
                 if (isLoading) {
                     item {
                         Box(
@@ -103,7 +103,7 @@ fun AddMovieScreen(
                 }
             }
 
-            // Detect when the user scrolls to the bottom of the list
+
             LaunchedEffect(listState) {
                 snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
                     .collect { lastVisibleItemIndex ->
@@ -117,7 +117,7 @@ fun AddMovieScreen(
     }
 }
 
-// Function to save the movie to Firestore
+
 fun addMovieToJournal(db: FirebaseFirestore, movie: Movie, rating: Float) {
     val movieData = hashMapOf(
         "title" to movie.title,

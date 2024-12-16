@@ -17,9 +17,9 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
     var comment by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
-    var isSaved by remember { mutableStateOf(false) } // Track save status
+    var isSaved by remember { mutableStateOf(false) }
 
-    // Fetch existing comment from Firestore
+
     LaunchedEffect(movieTitle) {
         db.collection("UserJournal")
             .whereEqualTo("title", movieTitle)
@@ -40,7 +40,7 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
     Scaffold(
         topBar = {
             Column {
-                Spacer(modifier = Modifier.height(16.dp)) // Add padding above TopAppBar
+                Spacer(modifier = Modifier.height(16.dp))
                 TopAppBar(
                     title = { Text("Review for $movieTitle") },
                     navigationIcon = {
@@ -80,7 +80,7 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            // Save the review in Firestore
+
                             db.collection("UserJournal")
                                 .whereEqualTo("title", movieTitle)
                                 .get()
@@ -91,8 +91,8 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
                                             .document(documentId)
                                             .update("comment", comment)
                                             .addOnSuccessListener {
-                                                isSaved = true // Mark as saved
-                                                navController.navigate("reviews") // Navigate to ReviewListScreen
+                                                isSaved = true
+                                                navController.navigate("reviews")
                                             }
                                             .addOnFailureListener { e ->
                                                 errorMessage = "Failed to save: ${e.message}"
@@ -108,7 +108,7 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
                         Text("Save Review")
                     }
 
-                    // Navigate after saving the review
+
                     if (isSaved) {
                         LaunchedEffect(Unit) {
                             navController.navigate("reviews")

@@ -38,8 +38,8 @@ fun JournalScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            Column { // Wrap TopAppBar in a Column to add padding
-                Spacer(modifier = Modifier.height(16.dp)) // Moves the bar down
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
                 TopAppBar(
                     title = { Text("My Journal") },
                     navigationIcon = {
@@ -85,9 +85,9 @@ fun JournalScreen(navController: NavHostController) {
 
 @Composable
 fun JournalMovieCard(movie: Map<String, Any>) {
-    val title = movie["title"] as? String ?: "Untitled" // Null-sikker titel
+    val title = movie["title"] as? String ?: "Untitled"
     val posterPath = movie["poster_path"] as? String
-    val rating = (movie["rating"] as? Double)?.toString() ?: "N/A" // Null-sikker rating
+    val rating = (movie["rating"] as? Double)?.toString() ?: "N/A"
 
     Card(
         modifier = Modifier

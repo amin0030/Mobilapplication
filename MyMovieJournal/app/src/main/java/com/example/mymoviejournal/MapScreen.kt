@@ -31,7 +31,7 @@ import kotlinx.coroutines.delay
 fun MapScreen(navController: NavHostController?, mapViewModel: MapViewModel) {
     val context = LocalContext.current
 
-    // State for location permission
+
     var locationPermissionGranted by remember { mutableStateOf(false) }
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -67,12 +67,12 @@ fun MapScreen(navController: NavHostController?, mapViewModel: MapViewModel) {
 
     Scaffold(
         topBar = {
-            Column { // Add padding to move TopAppBar down
-                Spacer(modifier = Modifier.height(16.dp)) // Add some space at the top
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
                 TopAppBar(
                     title = { Text("Nearby Cinemas") },
                     navigationIcon = {
-                        // Always display the Back button
+
                         IconButton(onClick = {
                             navController?.navigate("home") ?: Log.d("MapScreen", "No navController")
                         }) {

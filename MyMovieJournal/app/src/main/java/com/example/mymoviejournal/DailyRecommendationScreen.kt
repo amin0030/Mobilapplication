@@ -24,8 +24,8 @@ fun DailyRecommendationScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            Column { // Add padding to move TopAppBar down
-                Spacer(modifier = Modifier.height(16.dp)) // Add space before TopAppBar
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
                 TopAppBar(
                     title = { Text("Daily Movie Recommendation") },
                     backgroundColor = MaterialTheme.colors.primarySurface,
@@ -47,7 +47,7 @@ fun DailyRecommendationScreen(navController: NavController) {
         ) {
             when {
                 movie == null -> {
-                    CircularProgressIndicator() // Show spinner while loading
+                    CircularProgressIndicator()
                 }
                 movie?.title == null -> {
                     Text(

@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-// TMDb API Service
+
 interface TMDbService {
 
     @GET("movie/popular")
@@ -50,7 +50,7 @@ interface TMDbService {
     }
 }
 
-// Data classes for API Responses
+
 data class MovieResponse(
     val results: List<Movie>
 )

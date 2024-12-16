@@ -82,7 +82,7 @@ class MapViewModel(private val context: Context) : ViewModel() {
     private fun fetchNearbyCinemas(lat: Double, lng: Double) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Check permissions at runtime
+
                 val hasFineLocation = ContextCompat.checkSelfPermission(
                     context, Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
@@ -97,7 +97,7 @@ class MapViewModel(private val context: Context) : ViewModel() {
                     return@launch
                 }
 
-                // Prepare fields and request
+
                 val fields = listOf(
                     Place.Field.NAME,
                     Place.Field.LAT_LNG,
@@ -106,7 +106,7 @@ class MapViewModel(private val context: Context) : ViewModel() {
                 )
                 val request = FindCurrentPlaceRequest.newInstance(fields)
 
-                // Make the request
+
                 val response: FindCurrentPlaceResponse = placesClient.findCurrentPlace(request).await()
                 Log.d("MapViewModel", "Places response returned ${response.placeLikelihoods.size} places.")
 

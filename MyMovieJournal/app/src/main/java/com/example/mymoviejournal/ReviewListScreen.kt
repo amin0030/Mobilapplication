@@ -20,7 +20,7 @@ fun ReviewListScreen(navController: NavController) {
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    // Fetch reviews from Firestore
+
     LaunchedEffect(Unit) {
         db.collection("UserJournal")
             .get()
@@ -36,8 +36,8 @@ fun ReviewListScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            Column { // Wrap TopAppBar in a Column
-                Spacer(modifier = Modifier.height(16.dp)) // Add space above TopAppBar
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
                 TopAppBar(
                     title = { Text("My Reviews") },
                     navigationIcon = {

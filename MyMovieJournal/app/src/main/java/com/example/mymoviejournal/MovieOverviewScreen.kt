@@ -31,8 +31,8 @@ fun MovieOverviewScreen(
 
     Scaffold(
         topBar = {
-            Column { // Wrap TopAppBar in a Column
-                Spacer(modifier = Modifier.height(16.dp)) // Add space above TopAppBar
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
                 TopAppBar(
                     title = { Text("Movie Overview") },
                     backgroundColor = MaterialTheme.colors.primarySurface,
