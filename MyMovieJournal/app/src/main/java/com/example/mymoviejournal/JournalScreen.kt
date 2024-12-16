@@ -38,15 +38,18 @@ fun JournalScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("My Journal") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-
-            )
+            Column { // Wrap TopAppBar in a Column to add padding
+                Spacer(modifier = Modifier.height(16.dp)) // Moves the bar down
+                TopAppBar(
+                    title = { Text("My Journal") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    backgroundColor = MaterialTheme.colors.primarySurface
+                )
+            }
         }
     ) { paddingValues ->
         Box(
@@ -78,6 +81,7 @@ fun JournalScreen(navController: NavHostController) {
         }
     }
 }
+
 
 @Composable
 fun JournalMovieCard(movie: Map<String, Any>) {

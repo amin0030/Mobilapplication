@@ -17,8 +17,9 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
     var comment by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
+    var isSaved by remember { mutableStateOf(false) } // Track save status
 
-    // Hent eksisterende kommentar fra Firestore
+    // Fetch existing comment from Firestore
     LaunchedEffect(movieTitle) {
         db.collection("UserJournal")
             .whereEqualTo("title", movieTitle)
@@ -38,14 +39,17 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Review for $movieTitle") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            Column {
+                Spacer(modifier = Modifier.height(16.dp)) // Add padding above TopAppBar
+                TopAppBar(
+                    title = { Text("Review for $movieTitle") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     ) { paddingValues ->
         Box(
@@ -76,7 +80,7 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            // Gem anmeldelsen i Firestore
+                            // Save the review in Firestore
                             db.collection("UserJournal")
                                 .whereEqualTo("title", movieTitle)
                                 .get()
@@ -86,6 +90,13 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
                                         db.collection("UserJournal")
                                             .document(documentId)
                                             .update("comment", comment)
+                                            .addOnSuccessListener {
+                                                isSaved = true // Mark as saved
+                                                navController.navigate("reviews") // Navigate to ReviewListScreen
+                                            }
+                                            .addOnFailureListener { e ->
+                                                errorMessage = "Failed to save: ${e.message}"
+                                            }
                                     }
                                 }
                                 .addOnFailureListener { e ->
@@ -95,6 +106,13 @@ fun ReviewScreen(movieTitle: String, navController: NavController) {
                         modifier = Modifier.align(Alignment.End)
                     ) {
                         Text("Save Review")
+                    }
+
+                    // Navigate after saving the review
+                    if (isSaved) {
+                        LaunchedEffect(Unit) {
+                            navController.navigate("reviews")
+                        }
                     }
                 }
             }

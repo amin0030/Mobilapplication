@@ -11,8 +11,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.mymoviejournal.viewmodel.MovieOverviewViewModel
@@ -31,15 +31,18 @@ fun MovieOverviewScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Movie Overview") },
-                backgroundColor = MaterialTheme.colors.primarySurface,
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            Column { // Wrap TopAppBar in a Column
+                Spacer(modifier = Modifier.height(16.dp)) // Add space above TopAppBar
+                TopAppBar(
+                    title = { Text("Movie Overview") },
+                    backgroundColor = MaterialTheme.colors.primarySurface,
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     ) { paddingValues ->
         Box(

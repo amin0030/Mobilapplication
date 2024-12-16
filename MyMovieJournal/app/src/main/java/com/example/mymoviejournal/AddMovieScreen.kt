@@ -1,6 +1,5 @@
 package com.example.mymoviejournal
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,7 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import com.example.mymoviejournal.api.Movie
 import com.example.mymoviejournal.api.TMDbService
 import com.google.firebase.firestore.FirebaseFirestore
@@ -63,14 +61,17 @@ fun AddMovieScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Add a Movie") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            Column { // Wrap TopAppBar in a Column for padding
+                Spacer(modifier = Modifier.height(16.dp)) // Add space above TopAppBar
+                TopAppBar(
+                    title = { Text("Add a Movie") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {

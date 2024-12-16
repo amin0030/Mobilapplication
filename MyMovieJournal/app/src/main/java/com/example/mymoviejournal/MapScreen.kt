@@ -67,17 +67,21 @@ fun MapScreen(navController: NavHostController?, mapViewModel: MapViewModel) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Nearby Cinemas") },
-                navigationIcon = {
-                    // Always display the Back button
-                    IconButton(onClick = {
-                        navController?.navigate("home") ?: Log.d("MapScreen", "No navController")
-                    }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back to Home")
-                    }
-                }
-            )
+            Column { // Add padding to move TopAppBar down
+                Spacer(modifier = Modifier.height(16.dp)) // Add some space at the top
+                TopAppBar(
+                    title = { Text("Nearby Cinemas") },
+                    navigationIcon = {
+                        // Always display the Back button
+                        IconButton(onClick = {
+                            navController?.navigate("home") ?: Log.d("MapScreen", "No navController")
+                        }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back to Home")
+                        }
+                    },
+                    backgroundColor = MaterialTheme.colors.primarySurface
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -107,7 +111,11 @@ fun MapScreen(navController: NavHostController?, mapViewModel: MapViewModel) {
                         Text("Your Location: ${loc.lat}, ${loc.lng}", fontWeight = FontWeight.Bold)
                         LazyColumn {
                             items(cinemas) { cinema ->
-                                Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
                                     Column(modifier = Modifier.padding(8.dp)) {
                                         Text(cinema.name, fontWeight = FontWeight.Bold)
                                         Text(cinema.address)

@@ -24,15 +24,18 @@ fun DailyRecommendationScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Daily Movie Recommendation") },
-                backgroundColor = MaterialTheme.colors.primarySurface,
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            Column { // Add padding to move TopAppBar down
+                Spacer(modifier = Modifier.height(16.dp)) // Add space before TopAppBar
+                TopAppBar(
+                    title = { Text("Daily Movie Recommendation") },
+                    backgroundColor = MaterialTheme.colors.primarySurface,
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     ) { paddingValues ->
         Box(
