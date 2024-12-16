@@ -2,6 +2,9 @@
     <string name="app_name">MyMovieJournal</string>
     <string name="title_map_activity">Map Activity</string>
 
-    <!-- Add your Google Maps API key here -->
+    <!-- Google Maps API key -->
     <string name="google_maps_key">AIzaSyCsSNGdWPXs2km6OEmPG3iUfMQ5zuKR-NA</string>
+
+    <!-- TMDB API key -->
+    <string name="tmdb_api_key">939b476a789f7fcabff071dc47ebd640</string>
 </resources>

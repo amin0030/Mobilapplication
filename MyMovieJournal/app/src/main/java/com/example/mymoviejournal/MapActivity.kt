@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.rememberNavController
 import com.example.mymoviejournal.ui.theme.MyMovieJournalTheme
 
 class MapActivity : ComponentActivity() {
@@ -18,7 +19,8 @@ class MapActivity : ComponentActivity() {
 
         setContent {
             MyMovieJournalTheme {
-                MapScreen(mapViewModel)
+                val navController = rememberNavController() // Create navController
+                MapScreen(navController = navController, mapViewModel = mapViewModel)
             }
         }
     }
