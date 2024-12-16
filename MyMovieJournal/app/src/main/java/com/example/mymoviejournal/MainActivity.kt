@@ -10,11 +10,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mymoviejournal.ui.theme.MyMovieJournalTheme
+import com.example.mymoviejournal.viewmodel.MovieOverviewViewModel
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.auth.FirebaseAuth
 
@@ -78,6 +80,11 @@ fun MyMovieJournalApp() {
 
             composable("dailyRecommendation") {
                 DailyRecommendationScreen(navController)
+            }
+
+            composable("movieOverview") {
+                val viewModel: MovieOverviewViewModel = viewModel()
+                MovieOverviewScreen(viewModel = viewModel, navController = navController)
             }
         }
     } else {
